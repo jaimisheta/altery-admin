@@ -34,6 +34,7 @@ const RequestListingPage = (props) => {
   const [openComplaintsData, setOpenComplaintsData] = useState([])
   const [closeComplaintsData, setCloseComplaintsData] = useState([])
   const [pendingComplaintsData, setPendingComplaintsData] = useState([])
+  const [searchText, setSearchText] = useState('')
 
   useEffect(() => {
     props.action
@@ -69,6 +70,20 @@ const RequestListingPage = (props) => {
     setPendingComplaintsData(pendingComplaints)
   }
 
+  const getData = () => {
+    if (searchText.length === 0) {
+      return complaintsData
+    } else if (searchText === 'open') {
+      return openComplaintsData
+    } else if (searchText === 'done') {
+      return closeComplaintsData
+    } else if (searchText === 'pending') {
+      return pendingComplaintsData
+    } else {
+      return complaintsData
+    }
+  }
+
   return (
     <div className='table-container'>
       <div>
@@ -77,6 +92,8 @@ const RequestListingPage = (props) => {
           type='text'
           name='search'
           placeholder='Search...'
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
       <div className='status-filter'>
@@ -127,7 +144,7 @@ const RequestListingPage = (props) => {
           <th>View</th>
         </thead>
         <tbody>
-          {complaintsData.map((item) => (
+          {getData()?.map((item) => (
             <Row data={item} />
           ))}
         </tbody>
